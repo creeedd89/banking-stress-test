@@ -84,12 +84,6 @@ CONTINENTS = {
             ],
             "events": [
                 {
-                    "name": "Tequila Crisis (Peso Devaluation)",
-                    "date": "1994-12-20",
-                    "category": "Currency Crisis",
-                    "description": "Mexico devalues the peso."
-                },
-                {
                     "name": "2008 Financial Crisis",
                     "date": "2008-10-06",
                     "category": "Macroeconomic Crisis",
@@ -113,12 +107,6 @@ CONTINENTS = {
                 "BBAS3.SA"
             ],
             "events": [
-                {
-                    "name": "Real Devaluation",
-                    "date": "1999-01-13",
-                    "category": "Currency Crisis",
-                    "description": "Central bank drops the US dollar peg."
-                },
                 {
                     "name": "Operation Car Wash (Lava Jato)",
                     "date": "2014-03-17",
@@ -422,12 +410,6 @@ CONTINENTS = {
             ],
             "events": [
                 {
-                    "name": "1992 Banking Crisis Peak",
-                    "date": "1992-11-19",
-                    "category": "Banking Crisis",
-                    "description": "Sweden abandons currency peg amid systemic real estate/banking crash."
-                },
-                {
                     "name": "Swedbank Money Laundering Scandal",
                     "date": "2019-02-20",
                     "category": "Corporate Fraud",
@@ -450,97 +432,67 @@ CONTINENTS = {
             ]
         },
         "Greece": {
-            "index": "^ATG",
+            "index": "GREK",
             "banks": [
-                "EUROB.AT",
-                "ALPHA.AT",
-                "ETE.AT"
+                "TODO_EUROB"
             ],
             "events": [
                 {
-                    "name": "First Sovereign Bailout",
-                    "date": "2010-05-03",
-                    "category": "Sovereign Debt",
-                    "description": "EU and IMF agree to 110B euro bailout package."
-                },
-                {
-                    "name": "Capital Controls Reopening",
-                    "date": "2015-08-03",
-                    "category": "Banking Crisis",
-                    "description": "Athens Stock Exchange plunges 16% as it reopens after 5 weeks of closure."
+                    "name": "2020 COVID Crash",
+                    "date": "2020-03-09",
+                    "category": "Force Majeure",
+                    "description": "COVID crash hitting Greek equities."
                 }
             ]
         },
         "Portugal": {
-            "index": "^PSI20",
+            "index": "PGAL",
             "banks": [
-                "BCP.LS"
+                "TODO_BCP"
             ],
             "events": [
                 {
-                    "name": "2011 EU Bailout",
-                    "date": "2011-04-07",
-                    "category": "Sovereign Debt",
-                    "description": "Portugal requests EU financial assistance."
-                },
-                {
-                    "name": "Banco Espirito Santo Collapse",
-                    "date": "2014-08-04",
-                    "category": "Banking Crisis",
-                    "description": "BES is split into a good bank and bad bank following irregularities."
+                    "name": "2020 COVID Crash",
+                    "date": "2020-03-09",
+                    "category": "Force Majeure",
+                    "description": "COVID crash hitting Portuguese equities."
                 }
             ]
         },
         "Ireland": {
-            "index": "^ISEQ",
+            "index": "EIRL",
             "banks": [
-                "AIBG.I",
-                "BIRG.I"
+                "TODO_AIBG"
             ],
             "events": [
                 {
-                    "name": "Bank Guarantee Scheme",
-                    "date": "2008-09-30",
-                    "category": "Banking Crisis",
-                    "description": "Irish government guarantees all bank deposits and debts."
+                    "name": "2020 COVID Crash",
+                    "date": "2020-03-09",
+                    "category": "Force Majeure",
+                    "description": "COVID crash hitting Irish equities."
                 }
             ]
         },
         "Poland": {
-            "index": "^WIG20",
+            "index": "EPOL",
             "banks": [
-                "PKO.WA",
-                "PEO.WA"
+                "TODO_PKO"
             ],
             "events": [
                 {
-                    "name": "Swiss Franc Mortgage Shock",
-                    "date": "2015-01-15",
-                    "category": "Macroeconomic Crisis",
-                    "description": "SNB unpegging causes massive stress on Polish banks holding CHF mortgages."
-                },
-                {
-                    "name": "Ukraine War Start",
-                    "date": "2022-02-24",
-                    "category": "Geopolitical Shock",
-                    "description": "Border nation invasion causes WIG20 selloff."
+                    "name": "2020 COVID Crash",
+                    "date": "2020-03-09",
+                    "category": "Force Majeure",
+                    "description": "COVID crash hitting Polish equities."
                 }
             ]
         },
         "Turkey": {
-            "index": "XU100.IS",
+            "index": "TUR",
             "banks": [
-                "AKBNK.IS",
-                "GARAN.IS",
-                "ISCTR.IS"
+                "TODO_AKBNK"
             ],
             "events": [
-                {
-                    "name": "2001 Banking Crisis",
-                    "date": "2001-02-19",
-                    "category": "Banking Crisis",
-                    "description": "Political dispute triggers massive capital flight and overnight rate spikes."
-                },
                 {
                     "name": "2018 Currency Crisis",
                     "date": "2018-08-10",
@@ -556,29 +508,16 @@ CONTINENTS = {
             ]
         },
         "Russia": {
-            "index": "IMOEX.ME",
+            "index": "RSX",
             "banks": [
-                "SBER.ME",
-                "VTBR.ME"
+                "TODO_SBER"
             ],
             "events": [
-                {
-                    "name": "1998 Ruble Default",
-                    "date": "1998-08-17",
-                    "category": "Sovereign Default",
-                    "description": "Russia defaults on domestic debt and devalues the ruble."
-                },
                 {
                     "name": "Crimea Sanctions",
                     "date": "2014-03-03",
                     "category": "Geopolitical Shock",
                     "description": "MOEX drops over 10% as Russia invades Crimea."
-                },
-                {
-                    "name": "Ukraine Invasion",
-                    "date": "2022-02-24",
-                    "category": "Geopolitical Shock",
-                    "description": "Massive market crash leading to a complete halt of trading."
                 }
             ]
         },
@@ -614,12 +553,6 @@ CONTINENTS = {
             ],
             "events": [
                 {
-                    "name": "Yom Kippur War",
-                    "date": "1973-10-06",
-                    "category": "Terrorism/War",
-                    "description": "Note: Historical data may be unavailable. Major conflict."
-                },
-                {
                     "name": "2006 Lebanon War",
                     "date": "2006-07-12",
                     "category": "Terrorism/War",
@@ -648,12 +581,6 @@ CONTINENTS = {
             ],
             "events": [
                 {
-                    "name": "1980s Oil Glut",
-                    "date": "1986-01-01",
-                    "category": "Macroeconomic Crisis",
-                    "description": "Massive drop in oil prices."
-                },
-                {
                     "name": "2014 Oil Crash",
                     "date": "2014-11-27",
                     "category": "Macroeconomic Crisis",
@@ -680,17 +607,16 @@ CONTINENTS = {
             ]
         },
         "United Arab Emirates": {
-            "index": "^DFMGI",
+            "index": "UAE",
             "banks": [
-                "EMIRATESNBD.AE",
-                "FAB.AD"
+                "TODO_EMIRATESNBD"
             ],
             "events": [
                 {
-                    "name": "Dubai Debt Standstill",
-                    "date": "2009-11-25",
-                    "category": "Sovereign Debt",
-                    "description": "Dubai World asks for a freeze on $26B debt, crashing Gulf markets."
+                    "name": "2020 COVID Crash",
+                    "date": "2020-03-09",
+                    "category": "Force Majeure",
+                    "description": "COVID crash hitting UAE equities."
                 }
             ]
         },
@@ -709,9 +635,9 @@ CONTINENTS = {
             ]
         },
         "Lebanon": {
-            "index": "BLOM.BY",
+            "index": "TODO_BLOM",
             "banks": [
-                "AUDI.BY"
+                "TODO_AUDI"
             ],
             "events": [
                 {
@@ -783,23 +709,23 @@ CONTINENTS = {
             ]
         },
         "Kuwait": {
-            "index": "^KWSE",
+            "index": "TODO_KWSE",
             "banks": [
-                "NBK.KW"
+                "TODO_NBK"
             ],
             "events": [
                 {
-                    "name": "Iraqi Invasion",
-                    "date": "1990-08-02",
-                    "category": "Terrorism/War",
-                    "description": "Gulf War begins."
+                    "name": "2020 COVID Crash",
+                    "date": "2020-03-09",
+                    "category": "Force Majeure",
+                    "description": "COVID crash hitting Kuwait equities."
                 }
             ]
         },
         "Bahrain": {
-            "index": "^BAX",
+            "index": "TODO_BAX",
             "banks": [
-                "AUB.BH"
+                "TODO_AUB"
             ],
             "events": [
                 {
@@ -811,9 +737,9 @@ CONTINENTS = {
             ]
         },
         "Oman": {
-            "index": "^MSM30",
+            "index": "TODO_MSM30",
             "banks": [
-                "BKMB.OM"
+                "TODO_BKMB"
             ],
             "events": [
                 {
@@ -827,23 +753,16 @@ CONTINENTS = {
     },
     "Africa": {
         "Egypt": {
-            "index": "^CASE30",
+            "index": "EGPT",
             "banks": [
-                "COMI.CA",
-                "QNBA.CA"
+                "TODO_COMI"
             ],
             "events": [
                 {
-                    "name": "2011 Egyptian Revolution",
-                    "date": "2011-01-25",
-                    "category": "Political Shock",
-                    "description": "Protests eventually ousted Hosni Mubarak."
-                },
-                {
-                    "name": "2016 Currency Devaluation",
-                    "date": "2016-11-03",
-                    "category": "Currency Crisis",
-                    "description": "Central bank floats the pound, causing a massive devaluation."
+                    "name": "2020 COVID Crash",
+                    "date": "2020-03-09",
+                    "category": "Force Majeure",
+                    "description": "COVID crash hitting Egyptian equities."
                 }
             ]
         },
@@ -856,12 +775,6 @@ CONTINENTS = {
                 "NED.JO"
             ],
             "events": [
-                {
-                    "name": "2001 Rand Crisis",
-                    "date": "2001-12-01",
-                    "category": "Currency Crisis",
-                    "description": "The ZAR rapidly depreciated to historic lows."
-                },
                 {
                     "name": "Nenegate",
                     "date": "2015-12-09",
@@ -877,30 +790,23 @@ CONTINENTS = {
             ]
         },
         "Nigeria": {
-            "index": "TODO_NSEI",
+            "index": "NGE",
             "banks": [
                 "TODO_ZENITH"
             ],
             "events": [
                 {
-                    "name": "2016 Naira Devaluation",
-                    "date": "2016-06-20",
-                    "category": "Currency Crisis",
-                    "description": "Currency peg removed, Naira drops 30%."
-                },
-                {
-                    "name": "2023 Cash Crisis",
-                    "date": "2023-02-01",
-                    "category": "Macroeconomic Crisis",
-                    "description": "Botched banknote redesign leads to severe cash shortages."
+                    "name": "2020 COVID Crash",
+                    "date": "2020-03-09",
+                    "category": "Force Majeure",
+                    "description": "COVID crash hitting Nigerian equities."
                 }
             ]
         },
         "Kenya": {
-            "index": "^NSE20",
+            "index": "TODO_NSE20",
             "banks": [
-                "KCB.KE",
-                "EQTY.KE"
+                "TODO_KCB"
             ],
             "events": [
                 {
@@ -918,10 +824,9 @@ CONTINENTS = {
             ]
         },
         "Morocco": {
-            "index": "^MASI",
+            "index": "TODO_MASI",
             "banks": [
-                "ATW.CS",
-                "BCP.CS"
+                "TODO_ATW"
             ],
             "events": [
                 {
@@ -933,9 +838,9 @@ CONTINENTS = {
             ]
         },
         "Tunisia": {
-            "index": "^TUNINDEX",
+            "index": "TODO_TUNINDEX",
             "banks": [
-                "BIAT.TN"
+                "TODO_BIAT"
             ],
             "events": [
                 {
@@ -959,9 +864,9 @@ CONTINENTS = {
             ]
         },
         "Senegal": {
-            "index": "^BRVM",
+            "index": "TODO_BRVM",
             "banks": [
-                "ETI.CI"
+                "TODO_ETI"
             ],
             "events": [
                 {
@@ -1053,18 +958,11 @@ CONTINENTS = {
             ]
         },
         "Pakistan": {
-            "index": "PAK.AS",
+            "index": "PAK",
             "banks": [
-                "HBL.KA",
-                "UBL.KA"
+                "TODO_HBL"
             ],
             "events": [
-                {
-                    "name": "2008 Debt Crisis",
-                    "date": "2008-08-27",
-                    "category": "Sovereign Debt",
-                    "description": "KSE-100 crashed amidst extreme liquidity and political crisis."
-                },
                 {
                     "name": "2019 Balakot / India Tensions",
                     "date": "2019-02-26",
@@ -1151,12 +1049,6 @@ CONTINENTS = {
             ],
             "events": [
                 {
-                    "name": "1990 Bubble Burst",
-                    "date": "1990-01-04",
-                    "category": "Macroeconomic Crisis",
-                    "description": "The beginning of the Lost Decades."
-                },
-                {
                     "name": "2011 Fukushima Earthquake",
                     "date": "2011-03-11",
                     "category": "Natural Disaster",
@@ -1178,12 +1070,6 @@ CONTINENTS = {
             ],
             "events": [
                 {
-                    "name": "1997 Asian Financial Crisis",
-                    "date": "1997-11-21",
-                    "category": "Macroeconomic Crisis",
-                    "description": "Korea requests IMF bailout."
-                },
-                {
                     "name": "2017 North Korea Nuke Test",
                     "date": "2017-09-04",
                     "category": "Geopolitical Shock",
@@ -1199,12 +1085,6 @@ CONTINENTS = {
             ],
             "events": [
                 {
-                    "name": "1999 Jiji Earthquake",
-                    "date": "1999-09-21",
-                    "category": "Natural Disaster",
-                    "description": "Devastating earthquake shutting down TSMC plants."
-                },
-                {
                     "name": "2022 Pelosi Visit Tensions",
                     "date": "2022-08-02",
                     "category": "Geopolitical Shock",
@@ -1219,12 +1099,6 @@ CONTINENTS = {
                 "0939.HK"
             ],
             "events": [
-                {
-                    "name": "1997 Asian Crisis Defense",
-                    "date": "1997-10-23",
-                    "category": "Currency Crisis",
-                    "description": "HKMA defends peg, causing rates to spike."
-                },
                 {
                     "name": "2019 Protests",
                     "date": "2019-08-05",
@@ -1242,12 +1116,6 @@ CONTINENTS = {
             ],
             "events": [
                 {
-                    "name": "1997 Asian Crisis",
-                    "date": "1997-10-23",
-                    "category": "Macroeconomic Crisis",
-                    "description": "Regional contagion hits SGX."
-                },
-                {
                     "name": "2008 Lehman Collapse",
                     "date": "2008-09-15",
                     "category": "Macroeconomic Crisis",
@@ -1263,16 +1131,10 @@ CONTINENTS = {
             ],
             "events": [
                 {
-                    "name": "1998 Fall of Suharto",
-                    "date": "1998-05-21",
-                    "category": "Political Shock",
-                    "description": "Climax of Asian crisis leads to regime change."
-                },
-                {
-                    "name": "2002 Bali Bombings",
-                    "date": "2002-10-12",
-                    "category": "Terrorism/War",
-                    "description": "Devastating terror attack hurting tourism."
+                    "name": "2020 COVID Crash",
+                    "date": "2020-03-09",
+                    "category": "Force Majeure",
+                    "description": "COVID crash hitting Indonesian equities."
                 }
             ]
         },
@@ -1284,12 +1146,6 @@ CONTINENTS = {
             ],
             "events": [
                 {
-                    "name": "1997 Baht Devaluation",
-                    "date": "1997-07-02",
-                    "category": "Currency Crisis",
-                    "description": "Trigger of the Asian Financial Crisis."
-                },
-                {
                     "name": "2014 Military Coup",
                     "date": "2014-05-22",
                     "category": "Political Shock",
@@ -1298,18 +1154,11 @@ CONTINENTS = {
             ]
         },
         "Vietnam": {
-            "index": "^VNINDEX",
+            "index": "VNM",
             "banks": [
-                "VCB.HM",
-                "BID.HM"
+                "TODO_VCB"
             ],
             "events": [
-                {
-                    "name": "2008 Financial Crisis",
-                    "date": "2008-10-01",
-                    "category": "Macroeconomic Crisis",
-                    "description": "Global contagion reaches emerging VN."
-                },
                 {
                     "name": "2022 Anti-Corruption Arrests",
                     "date": "2022-10-08",
@@ -1326,12 +1175,6 @@ CONTINENTS = {
             ],
             "events": [
                 {
-                    "name": "1998 Capital Controls",
-                    "date": "1998-09-01",
-                    "category": "Regulatory Shock",
-                    "description": "Malaysia imposes strict capital controls amid crisis."
-                },
-                {
                     "name": "2018 1MDB Election Shock",
                     "date": "2018-05-09",
                     "category": "Political Shock",
@@ -1340,18 +1183,11 @@ CONTINENTS = {
             ]
         },
         "Philippines": {
-            "index": "^PSEI",
+            "index": "EPHE",
             "banks": [
-                "BDO.PS",
-                "BPI.PS"
+                "TODO_BDO"
             ],
             "events": [
-                {
-                    "name": "1997 Asian Crisis",
-                    "date": "1997-07-11",
-                    "category": "Currency Crisis",
-                    "description": "Peso devaluation forced."
-                },
                 {
                     "name": "2020 COVID Lockdown",
                     "date": "2020-03-16",
@@ -1371,12 +1207,6 @@ CONTINENTS = {
                 "ANZ.AX"
             ],
             "events": [
-                {
-                    "name": "1987 Black Monday",
-                    "date": "1987-10-20",
-                    "category": "Macroeconomic Crisis",
-                    "description": "ASX drops 25%."
-                },
                 {
                     "name": "2018 AMP Royal Commission",
                     "date": "2018-04-17",
