@@ -6,6 +6,11 @@ def fetch_data_for_region(market_index, bank_tickers, start_date="1999-01-01", e
     if end_date is None:
         end_date = pd.Timestamp.today().strftime('%Y-%m-%d')
         
+    if market_index.startswith("TODO"):
+        print(f"Market index {market_index} is marked as TODO. Skipping fetch.")
+        return False
+        
+    bank_tickers = [b for b in bank_tickers if not b.startswith("TODO")]
     tickers = bank_tickers + [market_index]
     
     print(f"Fetching data for {len(tickers)} tickers from {start_date} to {end_date}...")
@@ -33,6 +38,10 @@ def fetch_data_for_region(market_index, bank_tickers, start_date="1999-01-01", e
     
     # Calculate daily returns (percentage change)
     returns = data.pct_change().dropna(how='all')
+    
+    if returns.empty:
+        print("Fetched data contains no valid return rows. Tickers might be delisted or recently listed.")
+        return False
     
     output_file = 'bank_returns.csv'
     returns.to_csv(output_file)

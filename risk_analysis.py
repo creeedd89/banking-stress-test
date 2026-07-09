@@ -77,6 +77,10 @@ def run_risk_analysis(event_date_str, event_name, market_col='^GSPC', filepath='
         
     df = load_data(filepath)
     banks = [c for c in df.columns if c != market_col and 'Unnamed' not in c and c != 'Ticker']
+    if df.empty:
+        print("Dataframe is empty. Cannot run risk analysis.")
+        return None
+        
     event_date = pd.to_datetime(event_date_str)
     
     if event_date > df.index[-1] or event_date < df.index[0]:
