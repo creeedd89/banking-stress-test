@@ -92,3 +92,11 @@ if run_btn:
                         if fig_risk:
                             st.pyplot(fig_risk)
                         st.dataframe(risk_df[['Bank', 'Beta_Change', 'Corr_Change']])
+
+if __name__ == "__main__":
+    from streamlit.runtime import exists
+    if not exists():
+        import sys
+        from streamlit.web import cli as stcli
+        sys.argv = ["streamlit", "run", sys.argv[0]]
+        sys.exit(stcli.main())
