@@ -1,158 +1,94 @@
-import os
-import tkinter as tk
-from tkinter import ttk, messagebox
-import threading
-
+import streamlit as st
+import pandas as pd
 from config import CONTINENTS
 from fetch_data import fetch_data_for_region
 from event_study import run_event_study
 from risk_analysis import run_risk_analysis
 from generate_report import generate_reports
 
-class App:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Global Event Study Analyzer")
-        self.root.geometry("600x500")
-        
-        # UI Setup
-        self.setup_ui()
-        
-    def setup_ui(self):
-        main_frame = ttk.Frame(self.root, padding="20")
-        main_frame.pack(fill=tk.BOTH, expand=True)
-        
-        # Continent
-        ttk.Label(main_frame, text="Select Continent:").grid(row=0, column=0, sticky=tk.W, pady=5)
-        self.continent_var = tk.StringVar()
-        self.continent_cb = ttk.Combobox(main_frame, textvariable=self.continent_var, state="readonly", width=30)
-        self.continent_cb['values'] = list(CONTINENTS.keys())
-        self.continent_cb.grid(row=0, column=1, sticky=tk.EW, pady=5)
-        self.continent_cb.bind('<<ComboboxSelected>>', self.on_continent_select)
-        
-        # Country
-        ttk.Label(main_frame, text="Select Country:").grid(row=1, column=0, sticky=tk.W, pady=5)
-        self.country_var = tk.StringVar()
-        self.country_cb = ttk.Combobox(main_frame, textvariable=self.country_var, state="readonly", width=30)
-        self.country_cb.grid(row=1, column=1, sticky=tk.EW, pady=5)
-        self.country_cb.bind('<<ComboboxSelected>>', self.on_country_select)
-        
-        # Event
-        ttk.Label(main_frame, text="Select Historical Event:").grid(row=2, column=0, sticky=tk.W, pady=5)
-        self.event_var = tk.StringVar()
-        self.event_cb = ttk.Combobox(main_frame, textvariable=self.event_var, state="readonly", width=30)
-        self.event_cb.grid(row=2, column=1, sticky=tk.EW, pady=5)
-        
-        # Estimation Window
-        ttk.Label(main_frame, text="Estimation Window (days):").grid(row=3, column=0, sticky=tk.W, pady=5)
-        self.window_var = tk.StringVar(value="255")
-        ttk.Entry(main_frame, textvariable=self.window_var, width=10).grid(row=3, column=1, sticky=tk.W, pady=5)
-        
-        # Gap
-        ttk.Label(main_frame, text="Gap (days):").grid(row=4, column=0, sticky=tk.W, pady=5)
-        self.gap_var = tk.StringVar(value="10")
-        ttk.Entry(main_frame, textvariable=self.gap_var, width=10).grid(row=4, column=1, sticky=tk.W, pady=5)
-        
-        # Status Label
-        self.status_var = tk.StringVar(value="Ready.")
-        self.status_label = ttk.Label(main_frame, textvariable=self.status_var, font=('Helvetica', 10, 'italic'))
-        self.status_label.grid(row=5, column=0, columnspan=2, pady=20)
-        
-        # Run Button
-        self.run_btn = ttk.Button(main_frame, text="Run Analysis", command=self.run_analysis)
-        self.run_btn.grid(row=6, column=0, columnspan=2, pady=10)
-        
-    def on_continent_select(self, event):
-        continent = self.continent_var.get()
-        if continent:
-            countries = list(CONTINENTS[continent].keys())
-            self.country_cb['values'] = countries
-            self.country_cb.set('')
-            self.event_cb['values'] = []
-            self.event_cb.set('')
-            
-    def on_country_select(self, event):
-        continent = self.continent_var.get()
-        country = self.country_var.get()
-        if continent and country:
-            events = CONTINENTS[continent][country]["events"]
-            event_names = [e["name"] for e in events]
-            self.event_cb['values'] = event_names
-            if event_names:
-                self.event_cb.current(0)
-                
-    def get_event_date(self, continent, country, event_name):
-        events = CONTINENTS[continent][country]["events"]
-        for e in events:
-            if e["name"] == event_name:
-                return e["date"]
-        return None
+st.set_page_config(page_title="Global Event Study Analyzer", page_icon="🌍", layout="wide")
 
-    def run_analysis(self):
-        continent = self.continent_var.get()
-        country = self.country_var.get()
-        event_name = self.event_var.get()
-        
-        if not continent or not country or not event_name:
-            messagebox.showwarning("Input Error", "Please select a Continent, Country, and Event.")
-            return
-            
-        if continent == "Antarctica":
-            messagebox.showinfo("Antarctica", "Penguins do not have a functional stock market... yet! Try another continent.")
-            return
-            
-        try:
-            window = int(self.window_var.get())
-            gap = int(self.gap_var.get())
-        except ValueError:
-            messagebox.showwarning("Input Error", "Window and Gap must be integers.")
-            return
-            
-        self.run_btn.config(state=tk.DISABLED)
-        self.status_var.set("Running pipeline... Please wait.")
-        
-        # Run in thread so GUI doesn't freeze
-        thread = threading.Thread(target=self.pipeline_thread, args=(continent, country, event_name, window, gap))
-        thread.start()
-        
-    def pipeline_thread(self, continent, country, event_name, window, gap):
-        try:
-            country_data = CONTINENTS[continent][country]
-            market_index = country_data["index"]
-            bank_tickers = country_data["banks"]
-            event_date = self.get_event_date(continent, country, event_name)
-            
-            self.status_var.set(f"[1/4] Fetching data for {country} ({market_index})...")
-            success = fetch_data_for_region(market_index, bank_tickers, start_date="1980-01-01")
+st.title("🌍 Global Market Event & Stress Test Analyzer")
+st.markdown("""
+Analyze the quantitative impact of major historical events—from natural disasters and terrorist attacks to financial frauds and political shocks—across global stock markets.
+""")
+
+# --- Sidebar Configuration ---
+st.sidebar.header("1. Select Geography")
+
+# Continent Selection
+continents = list(CONTINENTS.keys())
+selected_continent = st.sidebar.selectbox("Select Continent", continents)
+
+# Country Selection
+countries = list(CONTINENTS[selected_continent].keys())
+selected_country = st.sidebar.selectbox("Select Country / Stock Market", countries)
+
+country_data = CONTINENTS[selected_continent][selected_country]
+market_index = country_data["index"]
+banks = country_data["banks"]
+
+st.sidebar.markdown(f"**Market Index:** `{market_index}`")
+st.sidebar.markdown(f"**Tracked Banks:** `{', '.join(banks)}`")
+
+# --- Event Selection ---
+st.sidebar.header("2. Select Historical Event")
+
+events = country_data["events"]
+event_names = [f"{e['name']} ({e['date']}) - {e['category']}" for e in events]
+selected_event_str = st.sidebar.selectbox("Select Event", event_names)
+
+# Extract just the name for our functions
+selected_event_name = selected_event_str.split(" (")[0]
+selected_event_date = [e['date'] for e in events if e['name'] == selected_event_name][0]
+
+# --- Parameters ---
+st.sidebar.header("3. Analysis Parameters")
+est_window = st.sidebar.number_input("Estimation Window (days)", min_value=30, max_value=500, value=255)
+gap = st.sidebar.number_input("Gap (days)", min_value=0, max_value=50, value=10)
+
+# --- Main Action ---
+run_btn = st.sidebar.button("🚀 Run Analysis", type="primary")
+
+if run_btn:
+    if market_index == "ICE":
+        st.error("🐧 **Error:** The Penguin Exchange (ICE) is currently frozen. Trading is suspended until the Great Ice Melt. Please select a valid country!")
+    else:
+        with st.status("Running Quantitative Pipeline...", expanded=True) as status:
+            st.write(f"Fetching data for {selected_country} from 1980...")
+            success = fetch_data_for_region(market_index, banks, start_date="1980-01-01")
             
             if not success:
-                self.root.after(0, self.update_status, "Failed to fetch data.")
-                return
+                status.update(label="Data Fetch Failed", state="error")
+                st.error("Failed to fetch historical market data from Yahoo Finance. This may happen if tickers were delisted.")
+            else:
+                st.write("Computing Cumulative Abnormal Returns (CAR)...")
+                car_df = run_event_study(selected_event_date, selected_event_name, market_col=market_index, est_window=est_window, gap=gap)
                 
-            self.status_var.set("[2/4] Running Event Study (CAR)...")
-            run_event_study(event_date, event_name, market_col=market_index, est_window=window, gap=gap)
-            
-            self.status_var.set("[3/4] Running Risk Analysis (Beta & Correlation)...")
-            run_risk_analysis(event_date, event_name, market_col=market_index, window=window, gap=gap)
-            
-            self.status_var.set("[4/4] Generating Reports...")
-            generate_reports(event_name)
-            
-            self.root.after(0, self.update_status, f"Success! Generated reports for {event_name}.")
-            
-            # Open images
-            if os.name == 'nt':
-                os.startfile('car_boxplot.png')
-                os.startfile('risk_change_barplot.png')
+                st.write("Decomposing Systematic (Beta) and Systemic Risk...")
+                risk_df = run_risk_analysis(selected_event_date, selected_event_name, market_col=market_index, window=est_window, gap=gap)
                 
-        except Exception as e:
-            self.root.after(0, self.update_status, f"Error: {e}")
-            
-    def update_status(self, message):
-        self.status_var.set(message)
-        self.run_btn.config(state=tk.NORMAL)
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = App(root)
-    root.mainloop()
+                if car_df is None or risk_df is None:
+                    status.update(label="Insufficient Data", state="error")
+                    st.error(f"Not enough historical data available around the event date ({selected_event_date}) for this market.")
+                else:
+                    st.write("Rendering visualizations...")
+                    fig_car, fig_risk = generate_reports(selected_event_name)
+                    
+                    status.update(label="Analysis Complete!", state="complete")
+                    
+                    st.success("Pipeline executed successfully!")
+                    
+                    col1, col2 = st.columns(2)
+                    
+                    with col1:
+                        st.subheader("Market Reaction (CAR)")
+                        if fig_car:
+                            st.pyplot(fig_car)
+                        st.dataframe(car_df[['Bank', 'CAR', 'p-value', 'Significant']])
+                        
+                    with col2:
+                        st.subheader("Risk Dynamics")
+                        if fig_risk:
+                            st.pyplot(fig_risk)
+                        st.dataframe(risk_df[['Bank', 'Beta_Change', 'Corr_Change']])
