@@ -1,40 +1,129 @@
-# 🌍 Global Market Event & Stress Test Analyzer (Streamlit App)
+# Global Market Event & Stress Test Analyzer
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
 ![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B.svg)
 ![Finance](https://img.shields.io/badge/Finance-Quantitative_Research-yellow.svg)
 
-## 📌 Project Overview
-How do global financial markets react to major historical events and stress tests? 
+## Abstract & Introduction
 
-This project explores the **market impact of historical crashes, terrorist attacks, and financial frauds** across the globe. By utilizing quantitative finance techniques, it provides a highly informative, interactive **Streamlit Web Application** to fetch historical market data, perform event studies, and analyze changes in both systematic and systemic risks. 
+Financial markets are continuously subjected to exogenous shocks, ranging from macroeconomic crises and regulatory stress tests to natural disasters and geopolitical turmoil. Quantifying the precise impact of these events on equity valuations and systemic risk is a cornerstone of empirical finance. 
 
-You can now analyze major banks across dozens of countries, evaluating their reactions to specific national and global events like the **Enron Scandal, 2008 Financial Crisis, COVID-19, 2008 Mumbai Attacks, and the Fukushima Earthquake**!
+The **Global Market Event & Stress Test Analyzer** is an open-source, Python-based quantitative research tool designed to measure how global banking equities react to major historical events. Built as an interactive Streamlit web application, this framework automates the retrieval of historical market data and executes rigorous econometric event studies across dozens of countries and hundreds of curated historical shocks (e.g., the 2008 Lehman Brothers collapse, the Enron scandal, Brexit, and the Fukushima disaster).
 
-## 🚀 Key Features
+This project aims to provide financial researchers, risk managers, and algorithmic traders with a robust toolkit to evaluate market efficiency, quantify abnormal returns, and measure structural shifts in systematic and systemic risk following market shocks.
 
-* **Modern Streamlit Dashboard (`app.py`)**: A stunning, dark-mode ready web interface built with Streamlit.
-* **Massive Historical Database**: Features hundreds of curated events across categories like *Economic Crises, Natural Disasters, Terrorism & Wars, Political Shocks, and Frauds/Scams*.
-* **Global Data Aggregation (`fetch_data.py`)**: Automatically retrieves historical banking data and market indices dating back to 1980.
-* **Event Study Methodology (`event_study.py`)**: Calculates Cumulative Abnormal Returns (CAR) using customizable estimation and event windows.
-* **Automated Rendering (`generate_report.py`)**: Generates high-quality visualizations of the selected event directly inside the web browser!
+---
 
-## 🛠️ Setup & Execution
+## Theoretical Framework & Calculations
 
-### Prerequisites
-Make sure you have Python installed, then set up your environment:
+The core econometric engine of this project relies heavily on established event study methodologies, directly mirroring the analytical rigor presented in *Neretina, Sahin, and de Haan (2015)* ("Banking stress test effects on returns and risks"). 
+
+### 1. The Market Model and Abnormal Returns (AR)
+To measure the impact of an event, we first establish a "normal" baseline return for each asset using the Capital Asset Pricing Model (CAPM) or the single-index market model. Over a designated estimation window (e.g., $t = [-265, -10]$ trading days relative to the event), we estimate the ordinary least squares (OLS) regression:
+
+$$ R_{i,t} = \alpha_i + \beta_i R_{m,t} + \varepsilon_{i,t} $$
+
+Where:
+* $R_{i,t}$ is the return of banking equity $i$ at time $t$.
+* $R_{m,t}$ is the return of the corresponding regional market portfolio (e.g., S&P 500, FTSE 100).
+* $\alpha_i$ and $\beta_i$ are the estimated firm-specific parameters.
+
+The **Abnormal Return (AR)** during the event window is the difference between the actual ex-post return and the normal return implied by the market model:
+
+$$ AR_{i,t} = R_{i,t} - (\hat{\alpha}_i + \hat{\beta}_i R_{m,t}) $$
+
+These daily abnormal returns are then aggregated over the event window to calculate the **Cumulative Abnormal Return (CAR)**, which captures the total equity impact of the shock.
+
+### 2. Decomposition of Systematic and Systemic Risk
+Following *Nijskens and Wagner (2011)* and *Neretina et al. (2015)*, the project does not merely look at price drops; it models the structural change in risk. Systematic risk ($\beta_i$) is decomposed into two distinct components: a market correlation component (capturing systemic interconnectedness) and a relative volatility component (capturing idiosyncratic risk).
+
+$$ \beta_i = \rho_{i,m} \frac{\sigma_i}{\sigma_m} $$
+
+Where:
+* $\rho_{i,m}$ is the correlation between the bank's equity and the market (proxy for **Systemic Risk**).
+* $\sigma_i / \sigma_m$ is the ratio of the bank's volatility to market volatility.
+
+By calculating $\beta_i$ and $\rho_{i,m}$ both before and after the event, the application quantifies whether a historical shock merely increased baseline volatility or fundamentally increased the systemic interconnectedness of the banking sector.
+
+---
+
+## Core Assumptions
+
+The validity of the outputs generated by this system relies on standard econometric assumptions inherent to event studies:
+
+1. **Efficient Market Hypothesis (Semi-Strong Form):** It is assumed that equity prices rapidly incorporate all newly available public information. Therefore, the economic impact of an event is captured by the CAR within a narrow window around the announcement/occurrence date.
+2. **Event Window Isolation:** We assume that the abnormal returns observed during the event window (e.g., $t = [-1, +1]$) are solely attributable to the specified shock, free from major confounding corporate events (like simultaneous M&A announcements).
+3. **Clean Estimation Window:** The parameters ($\hat{\alpha}_i, \hat{\beta}_i$) are estimated over a preceding period (e.g., 255 trading days) that is assumed to represent normal market conditions, unbiased by anticipation of the impending event.
+
+---
+
+## Capabilities
+
+The tool is designed for highly practical applications in modern quantitative finance:
+
+* **Institutional Stress Testing Validation:** Cross-reference regulatory stress test results (like CCAR or DFAST) against actual historical market reactions to determine if the market accurately prices in capital shortfalls.
+* **Algorithmic Alpha Generation:** Backtest statistical arbitrage strategies by identifying historical overreactions or underreactions in specific banking sectors during predictable crises.
+* **Historical Risk Backtesting:** Calculate post-event Beta regime shifts to adjust dynamic hedging ratios and risk-parity portfolios during unfolding macroeconomic crises.
+* **Cross-Border Contagion Analysis:** Compare how a single event (e.g., the 2008 Lehman collapse) resulted in asymmetric CARs across North American vs. European banking equities.
+
+---
+
+## Empirical Outputs & Profitability Tables
+
+The system outputs rigorous statistical summaries. Below are examples of mock empirical outputs generated by the analyzer for the **2008 Global Financial Crisis (Lehman Collapse)** across major US banks.
+
+### Table 1: Event Study Outcomes & Hypothetical Strategy Profitability
+*Event Window: [-1, +1] | Estimation Window: 255 days | Gap: 10 days*
+
+| Bank Ticker | Institution | CAR (%) | p-value | Significance | Theoretical Short Profit on $1M Position |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| **JPM** | JPMorgan Chase | -3.42% | 0.041 | ** | +$34,200 |
+| **BAC** | Bank of America | -8.15% | 0.003 | *** | +$81,500 |
+| **C** | Citigroup | -12.30% | 0.001 | *** | +$123,000 |
+| **WFC** | Wells Fargo | -4.11% | 0.038 | ** | +$41,100 |
+| **GS** | Goldman Sachs | -2.95% | 0.105 | NS | +$29,500 |
+| **MS** | Morgan Stanley | -6.88% | 0.012 | ** | +$68,800 |
+
+### Table 2: Post-Event Risk Regime Shifts
+*Comparing 255 days pre-event vs. 255 days post-event.*
+
+| Bank Ticker | Pre-Event $\beta$ | Post-Event $\beta$ | $\Delta$ Systematic Risk ($\beta$) | $\Delta$ Systemic Risk ($\rho_{i,m}$) | Risk Assessment |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **JPM** | 1.12 | 1.28 | +0.16 | +0.08 | Moderate Contagion |
+| **BAC** | 1.35 | 1.82 | +0.47 | +0.22 | High Contagion |
+| **C** | 1.41 | 2.15 | +0.74 | +0.31 | Severe Contagion |
+| **WFC** | 1.05 | 1.33 | +0.28 | +0.12 | Moderate Contagion |
+
+---
+
+## Technical Implementation
+
+### Repository Architecture
+
+* `app.py`: The main Streamlit dashboard and UI controller. Handles user inputs, multi-threading, and dynamic rendering.
+* `config.py`: A massive hierarchical database mapping 7 continents to dozens of countries, containing market indices, bank tickers, and curated historical events.
+* `fetch_data.py`: Aggregates global historical banking and market index data via the `yfinance` API.
+* `event_study.py`: The core econometric engine calculating Expected Returns, AR, CAR, and standard errors.
+* `risk_analysis.py`: Models pre- and post-event volatility, Beta shifts, and correlation metrics.
+* `generate_report.py`: Automates the rendering of high-quality `matplotlib` and `seaborn` statistical plots returned directly to the UI.
+
+### System Requirements & Setup
+
+**Prerequisites:** Python 3.8+
+
+1. **Clone the repository:**
 ```bash
 git clone https://github.com/creeedd89/banking-stress-test.git
 cd banking-stress-test
+```
+
+2. **Install dependencies:**
+```bash
 pip install -r requirements.txt
 ```
 
-### Running the Web App
-Start the Streamlit server by running:
+3. **Launch the Web Application:**
 ```bash
 streamlit run app.py
 ```
-This will automatically open the dashboard in your default web browser!
-
-## 🤝 Let's Connect!
-I completely overhauled this project into a fully-fledged global quantitative dashboard to deepen my understanding of quantitative finance, global history, and software engineering. If you found this interesting, feel free to connect with me!
+The interactive dashboard will automatically open in your default web browser, allowing you to seamlessly navigate global markets and historical crises.
