@@ -70,45 +70,37 @@ def analyze_risk(df, event_date, bank, market_col='^GSPC', window=255, gap=10):
         'RelVol_Change': post_rel_vol - pre_rel_vol
     }
 
-def main():
-    filepath = 'bank_returns.csv'
+def run_risk_analysis(event_date_str, event_name, market_col='^GSPC', filepath='bank_returns.csv', window=255, gap=10):
     if not os.path.exists(filepath):
         print("Data file not found.")
-        return
+        return None
         
     df = load_data(filepath)
-    market = '^GSPC'
-    banks = [c for c in df.columns if c != market and 'Unnamed' not in c and c != 'Ticker']
+    banks = [c for c in df.columns if c != market_col and 'Unnamed' not in c and c != 'Ticker']
+    event_date = pd.to_datetime(event_date_str)
     
-    events = [
-        "2019-06-27",
-        "2020-06-25",
-        "2021-06-24",
-        "2022-06-23",
-        "2023-06-28",
-        "2024-06-26",
-        "2025-06-27",
-        "2026-06-24" # May not have enough post-event data
-    ]
-    
+    if event_date > df.index[-1] or event_date < df.index[0]:
+        print(f"Skipping {event_date_str}, out of data bounds.")
+        return None
+        
     results = []
-    
-    for event_str in events:
-        event_date = pd.to_datetime(event_str)
-        for bank in banks:
-            metrics = analyze_risk(df, event_date, bank, market_col=market)
-            if metrics:
-                row = {'Event_Year': event_date.year, 'Bank': bank}
-                row.update(metrics)
-                results.append(row)
-                
+    for bank in banks:
+        metrics = analyze_risk(df, event_date, bank, market_col=market_col, window=window, gap=gap)
+        if metrics:
+            row = {'Event_Name': event_name, 'Event_Date': event_date_str, 'Bank': bank}
+            row.update(metrics)
+            results.append(row)
+            
+    if not results:
+        print("No valid risk data found for this event across banks.")
+        return None
+        
     results_df = pd.DataFrame(results)
     results_df.to_csv('risk_results_raw.csv', index=False)
     
     # Summary Table
-    summary = results_df.groupby('Event_Year')[['Beta_Change', 'Corr_Change', 'RelVol_Change']].mean()
-    print("\n--- Average Risk Changes by Event Year ---")
+    summary = results_df[['Beta_Change', 'Corr_Change', 'RelVol_Change']].mean()
+    print("\n--- Average Risk Changes ---")
     print(summary)
     
-if __name__ == "__main__":
-    main()
+    return results_df

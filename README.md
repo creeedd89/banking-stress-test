@@ -1,36 +1,33 @@
-# 🏦 Banking Stress Test & Market Risk Analysis
+# 🌍 Global Market Event & Stress Test Analyzer
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
 ![Pandas](https://img.shields.io/badge/Pandas-Data_Analysis-green.svg)
 ![Finance](https://img.shields.io/badge/Finance-Quantitative_Research-yellow.svg)
 
 ## 📌 Project Overview
-Regulatory stress tests are designed to evaluate the resilience of major financial institutions under adverse economic scenarios. But how does the market react to these tests? 
+How do global financial markets react to major historical events and stress tests? 
 
-This project explores the **market impact of banking stress tests** by utilizing quantitative finance techniques. It features a complete pipeline to fetch historical market data, perform event studies, and analyze changes in both systematic and systemic risks. 
+This project explores the **market impact of historical crashes and regulatory stress tests** across the globe. By utilizing quantitative finance techniques, it provides a complete, interactive pipeline to fetch historical market data, perform event studies, and analyze changes in both systematic and systemic risks. 
 
-Whether you are a financial analyst, data scientist, or quantitative researcher, this repository provides a robust framework for assessing regulatory market impacts.
+You can now analyze major banks across the **US, UK, Europe, Canada, and Japan**, and evaluate their reactions to events like the **Dot-Com Bubble, 2008 Financial Crisis, COVID-19, and the Silicon Valley Bank collapse**!
 
 ## 🚀 Key Features
 
-* **Data Aggregation (`fetch_data.py`)**: Automates the retrieval of historical banking data and market indices.
-* **Event Study Methodology (`event_study.py`)**: Calculates Cumulative Abnormal Returns (CAR) to measure the immediate market reaction around the stress test announcement dates.
+* **Interactive CLI (`main.py`)**: A fully interactive terminal app that lets you choose the country, the market index, and the historical event to analyze.
+* **Global Data Aggregation (`fetch_data.py`)**: Automatically retrieves historical banking data and market indices (S&P 500, FTSE 100, Euro Stoxx 50, etc.) dating back to 1999.
+* **Event Study Methodology (`event_study.py`)**: Calculates Cumulative Abnormal Returns (CAR) using customizable estimation and event windows.
 * **Risk Analytics (`risk_analysis.py`)**: Computes pre- and post-event changes in:
-  * **Systematic Risk (Beta)**: The bank's volatility relative to the broader market.
-  * **Systemic Risk (Correlation)**: The interconnectedness of bank returns, indicating broader sector vulnerability.
-* **Automated Reporting (`generate_report.py`)**: Generates high-quality, publication-ready visualizations using `Seaborn` and `Matplotlib`.
+  * **Systematic Risk (Beta)**: The bank's volatility relative to its regional market index.
+  * **Systemic Risk (Correlation)**: The interconnectedness of bank returns.
+* **Automated Reporting (`generate_report.py`)**: Generates dynamic, high-quality visualizations of the selected event using `Seaborn`.
 
-## 📊 Visual Highlights
-
-### 1. Market Reaction: Cumulative Abnormal Returns (CAR)
-This boxplot illustrates the distribution of Cumulative Abnormal Returns for banks across different stress test years. It highlights whether the announcements generally triggered positive or negative abnormal market movements.
-
-![Cumulative Abnormal Returns](car_boxplot.png)
-
-### 2. Risk Dynamics: Systematic vs. Systemic Risk
-The bar plot below details how risk metrics shifted following the stress test events. It contrasts changes in Systematic Risk (Beta) against Systemic Risk (Correlation).
-
-![Risk Changes](risk_change_barplot.png)
+## 🌐 Supported Global Markets
+- **United States** (S&P 500)
+- **United Kingdom** (FTSE 100)
+- **Europe (Eurozone)** (Euro Stoxx 50)
+- **Canada** (S&P/TSX Composite)
+- **Japan** (Nikkei 225)
+- **Custom Input**: Manually enter any Yahoo Finance index and bank tickers!
 
 ## 🛠️ Setup & Execution
 
@@ -42,12 +39,12 @@ cd banking-stress-test
 pip install -r requirements.txt
 ```
 
-### Running the Pipeline
-Execute the modules in the following order to replicate the analysis:
-1. `python fetch_data.py` - Retrieves necessary financial datasets.
-2. `python event_study.py` - Computes the abnormal returns around event windows.
-3. `python risk_analysis.py` - Evaluates the shift in risk metrics.
-4. `python generate_report.py` - Compiles the results into visualizations.
+### Running the Interactive App
+Start the analyzer by simply running:
+```bash
+python main.py
+```
+Follow the on-screen prompts to select your region, event, and analysis windows. The script will automatically fetch data, run the quantitative models, and output `.png` charts of the results.
 
 ## 🤝 Let's Connect!
-I built this project to deepen my understanding of quantitative finance and data science. If you found this interesting, have suggestions, or want to discuss financial modeling, feel free to connect with me!
+I expanded this project globally to deepen my understanding of quantitative finance, global markets, and interactive data science. If you found this interesting or want to discuss financial modeling, feel free to connect with me!
