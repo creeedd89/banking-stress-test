@@ -1,4 +1,6 @@
-# Global Market Configuration by Continent (Massive Exhaustive Database)
+import os
+
+NEW_CONFIG = """# Global Market Configuration by Continent (Massive Exhaustive Database)
 
 CONTINENTS = {
     "North America": {
@@ -244,3 +246,9 @@ CONTINENTS = {
         }
     }
 }
+"""
+
+with open("d:\\banking stress test\\config.py", "w", encoding='utf-8') as f:
+    f.write(NEW_CONFIG)
+
+print("SUCCESS")

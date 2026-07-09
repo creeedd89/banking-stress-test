@@ -39,8 +39,10 @@ event_names = [f"{e['name']} ({e['date']}) - {e['category']}" for e in events]
 selected_event_str = st.sidebar.selectbox("Select Event", event_names)
 
 # Extract just the name for our functions
-selected_event_name = selected_event_str.split(" (")[0]
-selected_event_date = [e['date'] for e in events if e['name'] == selected_event_name][0]
+selected_index = event_names.index(selected_event_str)
+selected_event = events[selected_index]
+selected_event_name = selected_event['name']
+selected_event_date = selected_event['date']
 
 # --- Parameters ---
 st.sidebar.header("3. Analysis Parameters")
