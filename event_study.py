@@ -57,23 +57,19 @@ def calculate_car(df, event_date, bank, market_col='^GSPC', est_window=255, gap=
     
     return car, se_car
 
-def run_event_study(event_date_str, event_name, market_col='^GSPC', filepath='bank_returns.csv', est_window=255, gap=10):
-    if not os.path.exists(filepath):
-        print("Data file not found. Please run fetch_data.py first.")
-        return None
+def run_event_study(event_date_str, event_name, df=None, market_col='^GSPC', est_window=255, gap=10):
+    if df is None:
+        raise ValueError("DataFrame 'df' must be provided.")
         
-    df = load_data(filepath)
     banks = [c for c in df.columns if c != market_col and 'Unnamed' not in c and c != 'Ticker']
     
     if df.empty:
-        print("Dataframe is empty. Cannot run event study.")
-        return None
+        raise ValueError("Dataframe is empty. Cannot run event study.")
         
     event_date = pd.to_datetime(event_date_str)
     
-    if event_date > df.index[-1] or event_date < df.index[0]:
-        print(f"Skipping {event_date_str}, out of data bounds.")
-        return None
+    # We no longer check strict bounds here as fetch_data.py handles validation.
+    # However, calculate_car still handles local bounds for the specific window.
         
     results = []
     for bank in banks:

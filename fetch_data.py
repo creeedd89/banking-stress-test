@@ -1,55 +1,66 @@
-import yfinance as yf
 import pandas as pd
 import os
+import streamlit as st
+from data_sources.yfinance_source import YFinanceSource
+from data_sources.stooq_source import StooqSource
+from data_sources.local_csv_source import LocalCSVSource
+from data_sources.fallback import FallbackChain, DataUnavailableError
 
-def fetch_data_for_region(market_index, bank_tickers, start_date="1999-01-01", end_date=None):
+def setup_fallback_chain() -> FallbackChain:
+    """Configures the order of data sources to try."""
+    return FallbackChain([
+        YFinanceSource(),
+        StooqSource(),
+        LocalCSVSource()
+    ])
+
+@st.cache_data(show_spinner=False)
+def fetch_data_for_region(country: str, market_index: str, bank_tickers: list, start_date="1999-01-01", end_date=None, min_rows: int = 100, event_date: str = None) -> pd.DataFrame:
     if end_date is None:
         end_date = pd.Timestamp.today().strftime('%Y-%m-%d')
         
     if market_index.startswith("TODO"):
-        print(f"Market index {market_index} is marked as TODO. Skipping fetch.")
-        return False
+        raise DataUnavailableError(market_index, country, [], "Market index is marked as TODO. Please update the config with a valid ticker.")
         
     bank_tickers = [b for b in bank_tickers if not b.startswith("TODO")]
-    tickers = bank_tickers + [market_index]
+    tickers = [market_index] + bank_tickers
     
     print(f"Fetching data for {len(tickers)} tickers from {start_date} to {end_date}...")
     
-    try:
-        data = yf.download(tickers, start=start_date, end=end_date)['Close']
-    except Exception as e:
-        print(f"Error fetching data: {e}")
-        return False
-        
-    if data.empty:
-        print("No data fetched. Please check the tickers.")
-        return False
-        
-    # Ensure columns are sorted nicely (market first, then banks)
-    # yfinance sometimes returns a Series if only 1 ticker is fetched, but we always have index + at least 1 bank
-    valid_market = [market_index] if market_index in data.columns else []
-    valid_banks = [b for b in bank_tickers if b in data.columns]
+    chain = setup_fallback_chain()
     
-    if not valid_market:
-        print(f"Warning: Market index {market_index} not found in fetched data.")
-        return False
+    fetched_data = {}
+    for ticker in tickers:
+        print(f"  Attempting to fetch {ticker}...")
+        df = chain.fetch_with_fallback(ticker, country, start_date, end_date, required_rows=min_rows, event_date=event_date)
+        # Rename 'Close' to the ticker name for joining
+        df = df.rename(columns={'Close': ticker})
+        fetched_data[ticker] = df
         
-    data = data[valid_market + valid_banks]
+    if not fetched_data:
+        raise DataUnavailableError("All", country, [], "No tickers could be fetched.")
+        
+    # Join all DataFrames on the Date index
+    combined_data = pd.concat(fetched_data.values(), axis=1)
+    
+    # Forward fill missing values to handle timezone/holiday mismatches between markets and banks
+    combined_data = combined_data.ffill()
     
     # Calculate daily returns (percentage change)
-    returns = data.pct_change().dropna(how='all')
+    returns = combined_data.pct_change().dropna(how='all')
     
-    if returns.empty:
-        print("Fetched data contains no valid return rows. Tickers might be delisted or recently listed.")
-        return False
+    if returns.empty or len(returns) < min_rows:
+        raise DataUnavailableError(
+            "Combined Returns", country, [], 
+            f"After merging, insufficient overlapping valid return rows. Needed {min_rows}, got {len(returns)}."
+        )
     
-    output_file = 'bank_returns.csv'
-    returns.to_csv(output_file)
-    print(f"Successfully saved daily returns to {output_file}")
-    
+    # We no longer save to CSV to avoid side effects in the cached function
+    # The cache handles storing this DataFrame directly in memory.
     print(f"\nTotal Trading Days Fetched: {len(returns)}")
-    return True
+    return returns
 
 if __name__ == "__main__":
     # Fallback to US if run directly
-    fetch_data_for_region('^GSPC', ['JPM', 'BAC', 'C', 'WFC', 'GS', 'MS'])
+    df = fetch_data_for_region('United States', '^GSPC', ['JPM', 'BAC'])
+    print(df.head())
